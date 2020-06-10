@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link rel="stylesheet" href="./main.css">
+  <script src="https://kit.fontawesome.com/9cdece3741.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+  
+  <title>台灣即時空氣品質</title>
+</head>
+<body>
+  <div class="header">
+    <h2 class="text-center mt-4">台灣即時空氣品質</h2>
+  </div>
+  <div id="app" class="container mt-5">
+    <select name="" id="" class="form-control mb-3" v-model="filter">
+      <option value="">--- 請選擇城市(所有城市) ---</option>
+      <option :value="item" v-for="(item,key) in location" :key="key">{{item}}</option>
+    </select>
+    <div>
+      <h4>關注城市</h4>
+      <div class="card-columns">
+        <card 
+            v-for="(item,key) in staredData" 
+            :key="key" 
+            :selectinfo="item"
+            @addtofocus="changeStar(item)">
+          <tempalte slot="icon">
+            <i class="fas fa-star"></i>
+          </tempalte>
+        </card>
+      </div>
+    </div>
+    
+    <hr>
+    <h4>城市列表</h4>
+    <div class="card-columns">
+      <card 
+            v-for="(item,key) in filterData" 
+            :key="key" 
+            :selectinfo="item"
+            @addtofocus="changeStar(item)"></card>
+    </div>
+  </div>
+  <script src="./main.js"></script>
+  <script type="text/x-template" id="cardTemplate">
+    <div class="card" :class="checkStateColor">
+        <div class="card-header">{{selectinfo.County}} - {{selectinfo.SiteName}}
+          <a href="#" class="float-right" @click.prevent="addFocus">
+            <slot name="icon"> 
+              <i class="far fa-star"></i>
+            </slot>
+          </a>
+        </div>
+        <div class="card-body">
+          <ul class="list-unstyled">
+            <li>AQI 指數: {{selectinfo.AQI}}</li>
+            <li>PM2.5: {{ selectinfo['PM2.5'] }}</li>
+            <li>說明: {{ selectinfo.Status }}</li>
+          </ul>
+        {{selectinfo.PublishTime}}
+        </div>
+      </div>
+  </script>
+</body>
+</html>
